@@ -18,11 +18,11 @@ export const listCaseinfo = (query?: CaseinfoQuery): AxiosPromise<CaseinfoVO[]> 
 
 /**
  * 查询案例信息详细
- * @param caseId
+ * @param id
  */
-export const getCaseinfo = (caseId: string | number): AxiosPromise<CaseinfoVO> => {
+export const getCaseinfo = (id: string | number): AxiosPromise<CaseinfoVO> => {
   return request({
-    url: '/case/caseinfo/' + caseId,
+    url: '/case/caseinfo/' + id,
     method: 'get'
   });
 };
@@ -53,11 +53,11 @@ export const updateCaseinfo = (data: CaseinfoForm) => {
 
 /**
  * 删除案例信息
- * @param caseId
+ * @param id
  */
-export const delCaseinfo = (caseId: string | number | Array<string | number>) => {
+export const delCaseinfo = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/case/caseinfo/' + caseId,
+    url: '/case/caseinfo/' + id,
     method: 'delete'
   });
 };

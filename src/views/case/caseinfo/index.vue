@@ -13,8 +13,8 @@
             <el-form-item label="信息" prop="info">
               <el-input v-model="queryParams.info" placeholder="请输入信息" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item label="审核状态" prop="start">
-              <el-input v-model="queryParams.start" placeholder="请输入审核状态" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="审核状态" prop="status">
+              <el-input v-model="queryParams.status" placeholder="请输入审核状态" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="视频地址" prop="videoUrl">
               <el-input v-model="queryParams.videoUrl" placeholder="请输入视频地址" clearable @keyup.enter="handleQuery" />
@@ -49,11 +49,11 @@
 
       <el-table v-loading="loading" border :data="caseinfoList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="案例id" align="center" prop="caseId" v-if="true" />
+        <el-table-column label="案例id" align="center" prop="id" v-if="true" />
         <el-table-column label="案例标题" align="center" prop="title" />
         <el-table-column label="图片地址" align="center" prop="imageUrl" />
         <el-table-column label="信息" align="center" prop="info" />
-        <el-table-column label="审核状态" align="center" prop="start" />
+        <el-table-column label="审核状态" align="center" prop="status" />
         <el-table-column label="视频地址" align="center" prop="videoUrl" />
         <el-table-column label="操作" align="center" fixed="right"  class-name="small-padding fixed-width">
           <template #default="scope">
@@ -81,8 +81,8 @@
         <el-form-item label="信息" prop="info">
             <el-input v-model="form.info" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="审核状态" prop="start">
-          <el-input v-model="form.start" placeholder="请输入审核状态" />
+        <el-form-item label="审核状态" prop="status">
+          <el-input v-model="form.status" placeholder="请输入审核状态" />
         </el-form-item>
         <el-form-item label="视频地址" prop="videoUrl">
           <el-input v-model="form.videoUrl" placeholder="请输入视频地址" />
@@ -122,11 +122,11 @@ const dialog = reactive<DialogOption>({
 });
 
 const initFormData: CaseinfoForm = {
-  caseId: undefined,
+  id: undefined,
   title: undefined,
   imageUrl: undefined,
   info: undefined,
-  start: undefined,
+  status: undefined,
   videoUrl: undefined,
 }
 const data = reactive<PageData<CaseinfoForm, CaseinfoQuery>>({
@@ -137,13 +137,13 @@ const data = reactive<PageData<CaseinfoForm, CaseinfoQuery>>({
     title: undefined,
     imageUrl: undefined,
     info: undefined,
-    start: undefined,
+    status: undefined,
     videoUrl: undefined,
     params: {
     }
   },
   rules: {
-    caseId: [
+    id: [
       { required: true, message: "案例id不能为空", trigger: "blur" }
     ],
   }
@@ -186,7 +186,7 @@ const resetQuery = () => {
 
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: CaseinfoVO[]) => {
-  ids.value = selection.map(item => item.caseId);
+  ids.value = selection.map(item => item.id);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -201,8 +201,8 @@ const handleAdd = () => {
 /** 修改按钮操作 */
 const handleUpdate = async (row?: CaseinfoVO) => {
   reset();
-  const _caseId = row?.caseId || ids.value[0]
-  const res = await getCaseinfo(_caseId);
+  const _id = row?.id || ids.value[0]
+  const res = await getCaseinfo(_id);
   Object.assign(form.value, res.data);
   dialog.visible = true;
   dialog.title = "修改案例信息";
@@ -213,7 +213,7 @@ const submitForm = () => {
   caseinfoFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       buttonLoading.value = true;
-      if (form.value.caseId) {
+      if (form.value.id) {
         await updateCaseinfo(form.value).finally(() =>  buttonLoading.value = false);
       } else {
         await addCaseinfo(form.value).finally(() =>  buttonLoading.value = false);
@@ -227,9 +227,9 @@ const submitForm = () => {
 
 /** 删除按钮操作 */
 const handleDelete = async (row?: CaseinfoVO) => {
-  const _caseIds = row?.caseId || ids.value;
-  await proxy?.$modal.confirm('是否确认删除案例信息编号为"' + _caseIds + '"的数据项？').finally(() => loading.value = false);
-  await delCaseinfo(_caseIds);
+  const _ids = row?.id || ids.value;
+  await proxy?.$modal.confirm('是否确认删除案例信息编号为"' + _ids + '"的数据项？').finally(() => loading.value = false);
+  await delCaseinfo(_ids);
   proxy?.$modal.msgSuccess("删除成功");
   await getList();
 }

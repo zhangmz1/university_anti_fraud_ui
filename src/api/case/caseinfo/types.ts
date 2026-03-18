@@ -2,7 +2,10 @@ export interface CaseinfoVO {
   /**
    * 案例id
    */
-  caseId: string | number;
+  /**
+   * 案例id
+   */
+  id: string | number;
 
   /**
    * 案例标题
@@ -35,7 +38,10 @@ export interface CaseinfoForm extends BaseEntity {
   /**
    * 案例id
    */
-  caseId?: string | number;
+  /**
+   * 案例id
+   */
+  id?: string | number;
 
   /**
    * 案例标题
